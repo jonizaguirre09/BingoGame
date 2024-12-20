@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,9 +15,13 @@
 
   <!-- Selección de modo -->
   <div id="mode-selection" style="display: none;">
-    <h1>Selecciona un modo de juego</h1>
-    <button id="manual-mode">Manual</button>
-    <button id="automatic-mode">Automático</button>
+    <h1>Modo de juego</h1>
+    <img src="images/manual-auto.jpg" alt="Modo de Juego" class="mode-image">
+    <div class="mode-container">
+      <button id="manual-mode">Manual</button>
+      
+      <button id="automatic-mode">Automático</button>
+    </div>
   </div>
 
   <!-- Contenedor del juego -->
@@ -31,6 +35,7 @@
     <!-- Controles manuales -->
     <div id="manual-controls" style="display: none;">
       <button id="generate-number">Generar Número</button>
+      <button id="repeat-numbers">Repetir números</button>
       <button id="reset">Reiniciar</button>
       <button id="back-to-start">Inicio</button>
     </div>
@@ -40,6 +45,7 @@
       <div>
         <label for="interval">Intervalo:</label>
         <select id="interval">
+          <option value="3000">3 segundos</option>
           <option value="5000">5 segundos</option>
           <option value="10000">10 segundos</option>
           <option value="15000">15 segundos</option>
@@ -48,8 +54,17 @@
       </div>
       <button id="start-auto">Empezar</button>
       <button id="stop-auto" disabled>Parar</button>
+      <button id="repeat-numbers-auto">Repetir números</button>
       <button id="reset">Reiniciar</button>
       <button id="back-to-start">Inicio</button>
+    </div>
+
+    <!-- Contenedor para elegir la voz -->
+    <div id="voice-settings">
+      <button id="voice-settings-button">Seleccionar Voz</button>
+      <div id="voice-dropdown">
+        <select id="voice-select"></select>
+      </div>
     </div>
   </div>
 
