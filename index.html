@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bingo Game</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Pantalla de inicio -->
+  <div id="start-screen">
+    <img src="images/bingo_inicio.jpg" alt="Bingo Inicio" id="start-image">
+    <button id="start-button">EMPEZAR</button>
+  </div>
+
+  <!-- Selección de modo -->
+  <div id="mode-selection" style="display: none;">
+    <h1>Selecciona un modo de juego</h1>
+    <button id="manual-mode">Manual</button>
+    <button id="automatic-mode">Automático</button>
+  </div>
+
+  <!-- Contenedor del juego -->
+  <div id="game-container" style="display: none;">
+    <h1>Bingo</h1>
+    <div id="numbers-board"></div>
+    <div id="current-number-container">
+      <p id="current-number">Presiona para comenzar</p>
+    </div>
+
+    <!-- Controles manuales -->
+    <div id="manual-controls" style="display: none;">
+      <button id="generate-number">Generar Número</button>
+      <button id="reset">Reiniciar</button>
+      <button id="back-to-start">Inicio</button>
+    </div>
+
+    <!-- Controles automáticos -->
+    <div id="automatic-controls" style="display: none;">
+      <div>
+        <label for="interval">Intervalo:</label>
+        <select id="interval">
+          <option value="5000">5 segundos</option>
+          <option value="10000">10 segundos</option>
+          <option value="15000">15 segundos</option>
+          <option value="20000">20 segundos</option>
+        </select>
+      </div>
+      <button id="start-auto">Empezar</button>
+      <button id="stop-auto" disabled>Parar</button>
+      <button id="reset">Reiniciar</button>
+      <button id="back-to-start">Inicio</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
