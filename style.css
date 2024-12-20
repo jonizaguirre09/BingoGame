@@ -7,6 +7,58 @@ body {
   padding: 0;
 }
 
+#voice-settings {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+}
+
+#voice-settings-button {
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  background-color: #333;
+  color: white;
+  transition: background-color 0.3s;
+}
+
+#voice-settings-button:hover {
+  background-color: #555;
+}
+
+#voice-dropdown {
+  display: none; /* Ocultar inicialmente */
+  position: absolute;
+  top: 35px; /* Espaciado respecto al botón */
+  right: 0;
+  background-color: white;
+  border: 1px solid #333;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+#voice-dropdown select {
+  padding: 5px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  width: 150px; /* Ajustar el ancho del selector */
+}
+
+#voice-dropdown select:focus {
+  outline: none; /* Quitar el contorno por defecto */
+}
+
+#start-screen,
+#mode-selection,
+#game-container {
+  transition: opacity 0.5s ease;
+}
+
 #start-screen {
   display: flex;
   flex-direction: column;
@@ -17,8 +69,8 @@ body {
 }
 
 #start-image {
-  width: 80%;
-  max-width: 600px;
+  width: 100%;
+  max-width: 800px;
   margin-bottom: 20px;
 }
 
@@ -45,6 +97,18 @@ body {
   gap: 20px;
 }
 
+.mode-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px; /* Espaciado entre botones e imagen */
+}
+
+.mode-image {
+  width: 150px; /* Ajusta el tamaño de la imagen */
+  height: auto; /* Mantiene la proporción */
+}
+
 #mode-selection button {
   padding: 10px 20px;
   font-size: 18px;
@@ -63,7 +127,7 @@ body {
 #game-container {
   margin: 50px auto;
   width: 80%;
-  max-width: 600px;
+  max-width: 750px;
   padding: 20px;
   border: 2px solid #333;
   border-radius: 10px;
@@ -131,6 +195,12 @@ button:hover {
 
 #automatic-controls label {
   font-size: 16px;
+}
+
+#interval-container {
+  display: flex;
+  justify-content: center; /* Centra el selector */
+  margin-top: 20px; /* Espaciado superior */
 }
 
 #interval {
