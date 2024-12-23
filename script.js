@@ -17,15 +17,11 @@ const intervalSelector = document.getElementById("interval");
 const startAutoButton = document.getElementById("start-auto");
 const stopAutoButton = document.getElementById("stop-auto");
 const repeatButtonAuto = document.getElementById("repeat-numbers-auto");
-const voiceSelect = document.getElementById("voice-select");
-const voiceSettingsButton = document.getElementById("voice-settings-button");
-const voiceDropdown = document.getElementById("voice-dropdown");
 
 // Variables del juego
 let numbers = Array.from({ length: 90 }, (_, i) => i + 1);
 let calledNumbers = [];
 let autoModeInterval = null;
-let voices = [];
 
 // Generar el tablero de números
 function generateNumbersBoard() {
@@ -44,17 +40,10 @@ function markNumber(number) {
   cells[number - 1].classList.add("selected");
 }
 
-// Reproducir voz
-function speakNumber(number) {
-  const utterance = new SpeechSynthesisUtterance(`${number}`);
-  utterance.lang = 'es-ES'; // Establecer idioma a español
-
-  // Obtener la voz seleccionada
-  const selectedVoice = voiceSelect.value;
-  const voice = voices.find(voice => voice.name === selectedVoice);
-  utterance.voice = voice; // Asignar la voz seleccionada
-
-  speechSynthesis.speak(utterance);
+// Reproducir el audio correspondiente al número
+function playAudio(number) {
+  const audio = new Audio(`Números/${number}.mp3`);
+  audio.play();
 }
 
 // Generar un número aleatorio
@@ -68,9 +57,7 @@ function generateNumber() {
   calledNumbers.push(number);
   currentNumberElement.textContent = `Número: ${number}`;
   markNumber(number);
-  
-  // Reproducir el número en voz alta
-  speakNumber(number);
+  playAudio(number); // Reproducir el audio
 }
 
 // Repetir números en orden
@@ -80,15 +67,13 @@ function repeatNumbersInOrder() {
     return;
   }
   stopAutoMode();
-  // Ordenar los números llamados
   calledNumbers.sort((a, b) => a - b);
-  // Reproducir los números en orden
-  calledNumbers.forEach(number => {
+  calledNumbers.forEach((number, index) => {
     setTimeout(() => {
       currentNumberElement.textContent = `Número: ${number}`;
       markNumber(number);
-      speakNumber(number);
-    }, 2000 * calledNumbers.indexOf(number));
+      playAudio(number);
+    }, 2000 * index);
   });
 }
 
@@ -139,7 +124,6 @@ manualModeButton.addEventListener("click", () => {
   gameContainer.style.display = "block";
   manualControls.style.display = "flex";
   automaticControls.style.display = "none";
-  showVoiceSelection(); // Mostrar selección de voz
   resetGame();
 });
 
@@ -148,13 +132,12 @@ automaticModeButton.addEventListener("click", () => {
   gameContainer.style.display = "block";
   manualControls.style.display = "none";
   automaticControls.style.display = "flex";
-  showVoiceSelection(); // Mostrar selección de voz
   resetGame();
 });
 
 generateButton.addEventListener("click", generateNumber);
-repeatButton.addEventListener("click", repeatNumbersInOrder); // Repetir números en modo manual
-repeatButtonAuto.addEventListener("click", repeatNumbersInOrder); // Repetir números en modo automático
+repeatButton.addEventListener("click", repeatNumbersInOrder);
+repeatButtonAuto.addEventListener("click", repeatNumbersInOrder);
 
 startAutoButton.addEventListener("click", () => {
   const interval = parseInt(intervalSelector.value);
@@ -168,32 +151,3 @@ backButton.forEach(button => button.addEventListener("click", backToStart));
 
 // Inicializar el tablero
 generateNumbersBoard();
-
-// Cargar voces disponibles
-function populateVoiceList() {
-  voices = speechSynthesis.getVoices();
-  voiceSelect.innerHTML = ""; // Limpiar opciones anteriores
-  voices.forEach((voice) => {
-    const option = document.createElement("option");
-    option.value = voice.name;
-    option.textContent = `${voice.name} (${voice.lang})`;
-    voiceSelect.appendChild(option);
-  });
-}
-
-// Llamar a populateVoiceList cuando las voces están disponibles
-if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
-  speechSynthesis.onvoiceschanged = populateVoiceList;
-}
-
-// Mostrar y ocultar selección de voz
-function showVoiceSelection() {
-  voiceSettingsButton.addEventListener("click", () => {
-    voiceDropdown.style.display = voiceDropdown.style.display === "none" ? "block" : "none";
-  });
-}
-
-// Inicializar selección de voz
-populateVoiceList();
-showVoiceSelection();
-
