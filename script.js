@@ -23,6 +23,7 @@ let numbers = Array.from({ length: 90 }, (_, i) => i + 1);
 let calledNumbers = [];
 let autoModeInterval = null;
 let audioCache = {};
+let isPlaying = false; // Indicador para controlar la reproducción
 
 // Pre-cargar audios
 function preloadAudio() {
@@ -50,19 +51,26 @@ function markNumber(number) {
 }
 
 // Reproducir el audio correspondiente al número
-function playAudio(number) {
+function playAudio(number, callback) {
   const audio = audioCache[number];
   if (audio) {
+    isPlaying = true;
     audio.play().catch(error => {
       console.error(`Error al reproducir el audio del número ${number}:`, error);
     });
+    audio.onended = () => {
+      isPlaying = false;
+      if (callback) callback();
+    };
   } else {
     console.warn(`Audio no encontrado para el número ${number}`);
+    if (callback) callback();
   }
 }
 
 // Generar un número aleatorio
 function generateNumber() {
+  if (isPlaying) return; // Evitar que se genere un nuevo número si ya hay audio reproduciéndose
   if (numbers.length === 0) {
     currentNumberElement.textContent = "¡Todos los números han sido llamados!";
     return;
@@ -83,21 +91,34 @@ function repeatNumbersInOrder() {
   }
   stopAutoMode();
   calledNumbers.sort((a, b) => a - b);
-  calledNumbers.forEach((number, index) => {
-    setTimeout(() => {
+  let index = 0;
+
+  function playNextNumber() {
+    if (index < calledNumbers.length) {
+      const number = calledNumbers[index];
       currentNumberElement.textContent = `Número: ${number}`;
       markNumber(number);
-      playAudio(number);
-    }, 2000 * index);
-  });
+      playAudio(number, () => {
+        setTimeout(() => {
+          index++;
+          playNextNumber();
+        }, 2000); // Descanso de 2 segundos entre números
+      });
+    }
+  }
+
+  playNextNumber();
 }
+
 
 // Modo automático
 function startAutoMode(interval) {
   autoModeInterval = setInterval(() => {
-    generateNumber();
-    if (numbers.length === 0) {
-      stopAutoMode();
+    if (!isPlaying) {
+      generateNumber();
+      if (numbers.length === 0) {
+        stopAutoMode();
+      }
     }
   }, interval);
   stopAutoButton.disabled = false;
