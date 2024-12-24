@@ -22,6 +22,15 @@ const repeatButtonAuto = document.getElementById("repeat-numbers-auto");
 let numbers = Array.from({ length: 90 }, (_, i) => i + 1);
 let calledNumbers = [];
 let autoModeInterval = null;
+let audioCache = {};
+
+// Pre-cargar audios
+function preloadAudio() {
+  for (let i = 1; i <= 90; i++) {
+    const audio = new Audio(encodeURI(`Números/${i}.mp3`));
+    audioCache[i] = audio;
+  }
+}
 
 // Generar el tablero de números
 function generateNumbersBoard() {
@@ -42,8 +51,14 @@ function markNumber(number) {
 
 // Reproducir el audio correspondiente al número
 function playAudio(number) {
-  const audio = new Audio(`Números/${number}.mp3`);
-  audio.play();
+  const audio = audioCache[number];
+  if (audio) {
+    audio.play().catch(error => {
+      console.error(`Error al reproducir el audio del número ${number}:`, error);
+    });
+  } else {
+    console.warn(`Audio no encontrado para el número ${number}`);
+  }
 }
 
 // Generar un número aleatorio
@@ -149,5 +164,6 @@ stopAutoButton.addEventListener("click", stopAutoMode);
 resetButton.forEach(button => button.addEventListener("click", resetGame));
 backButton.forEach(button => button.addEventListener("click", backToStart));
 
-// Inicializar el tablero
+// Inicializar el tablero y precargar audios
 generateNumbersBoard();
+preloadAudio();
